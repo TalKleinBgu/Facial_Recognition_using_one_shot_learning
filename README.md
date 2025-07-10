@@ -1,10 +1,5 @@
 # Deep Learning HW2 – Face Verification Using Siamese Networks
 
-### 👥 Authors:
-- **Ariel Siman Tov** – 209449821  
-- **Tal Klein** – 209234103
-
----
 
 ## 🧠 Project Overview
 
