@@ -4,7 +4,9 @@
 ## 🧠 Project Overview
 
 This project focuses on training a **Siamese Neural Network** on the [LFW-a Dataset](http://vis-www.cs.umass.edu/lfw/) to verify whether two face images belong to the same person. The network learns a similarity function rather than a direct classification.
-
+> 📄 Our work is based on the paper:  
+> **[Siamese Neural Networks for One-shot Image Recognition](https://www.cs.cmu.edu/~rsalakhu/papers/oneshot1.pdf)** by Gregory Koch et al.  
+> This architecture forms the foundation of our approach to comparing face embeddings.
 ---
 
 ## 📁 Dataset Summary
@@ -22,24 +24,6 @@ This project focuses on training a **Siamese Neural Network** on the [LFW-a Data
 
 ---
 
-## 🛠 Preprocessing Pipeline
-
-1. **Pair Parsing**: Using `parse_pairs_file()` to extract image paths and labels.
-2. **Image Transformation**:
-   - Convert to grayscale  
-   - Resize to `250x250`  
-   - Normalize and convert to tensor
-3. **Custom Dataset Class**: `LFWDataset`
-   - Returns `(img1, img2, label)`
-   - Label: `1 = same person`, `0 = different people`
-4. **Train/Val/Test Splitting**:
-   - 90/10 split in train set (balanced labels)
-5. **DataLoader**:
-   - Batch size = 32
-   - Iterates over pair samples
-
----
-
 ## 🧱 Model Architecture
 
 The model is a **Siamese CNN** consisting of:
@@ -50,7 +34,7 @@ The model is a **Siamese CNN** consisting of:
 - 1 × Fully Connected layer  
 - Adapted kernel sizes: `25×25`, `18×18`, `10×10` (due to input size 250×250)
 
-> 🧩 Architecture Illustration:  
+> 🧩 Architecture Illustration by the paper:  
 > ![](images/image2.png)
 
 ---
@@ -69,14 +53,21 @@ The model is a **Siamese CNN** consisting of:
 
 ## 🔬 Experiments Summary
 
-| Exp | Optimizer | Batch | BN | Dropout | Test Acc. | Train Acc. |
-|-----|-----------|-------|----|---------|-----------|------------|
-| 1   | SGD       | 32    | ❌ | ❌      | 68.7%     | 80.1%      |
-| 2   | SGD       | 32    | ✅ | ❌      | **72.9%** | 85.5%      |
-| 3   | SGD       | 64    | ✅ | ❌      | 72.0%     | 90.5%      |
-| 4   | Adam      | 32    | ✅ | ❌      | 54.2%     | 65.5%      |
-| 5   | Adam      | 64    | ✅ | ❌      | 52.2%     | 63.2%      |
-| 6   | SGD       | 32    | ✅ | ✅      | 59.0%     | 72.5%      |
+The following table summarizes all six experiments, including optimizer, batch size, use of batch normalization and dropout, and the results:
+
+| Exp | Epochs | Batch Size | Optimizer | Train Loss | Train Accuracy | Val Loss | Val Accuracy | Test Loss | Test Accuracy | Time Taken | BatchNorm | Dropout |
+|-----|--------|------------|-----------|-------------|----------------|-----------|---------------|------------|----------------|-------------|------------|---------|
+| 1   | 14     | 32         | SGD       | 0.506       | 80.11%         | 0.598     | 75.42%        | 0.663      | 68.7%          | 104.835     | ❌         | ❌      |
+| 2   | 7      | 32         | SGD       | 0.406       | **85.52%**     | 0.675     | 73.58%        | 0.667      | **72.9%**      | 47.134      | ✅         | ❌      |
+| 3   | 10     | 64         | SGD       | 0.294       | 90.49%         | 0.600     | 75.57%        | 0.597      | 72.0%          | 50.642      | ✅         | ❌      |
+| 4   | 12     | 32         | Adam      | 0.695       | 65.51%         | 0.733     | 65.97%        | 0.688      | 54.2%          | 52.579      | ✅         | ❌      |
+| 5   | 6      | 64         | Adam      | 0.700       | 63.24%         | 0.708     | 61.11%        | 0.725      | 52.2%          | 19.484      | ✅         | ❌      |
+| 6   | 7      | 32         | SGD       | 0.620       | 72.47%         | 0.715     | 62.50%        | 0.676      | 59.0%          | 18.307      | ✅         | ✅      |
+
+- ✅ = Used in experiment  
+- ❌ = Not used  
+- **Bold** = Best performance for that metric
+
 
 ---
 
@@ -105,28 +96,3 @@ The model is a **Siamese CNN** consisting of:
 > ![](images/image6.png)
 
 ---
-
-## 🚀 Future Work
-
-- Try additional optimizers: RMSProp, Lookahead  
-- Add data augmentation for generalization  
-- Implement deeper networks like ResNet Siamese  
-- Hyperparameter optimization for learning rate and dropout
-
----
-
-## 📎 Appendix
-
-> 📋 Table of results extracted from model outputs:  
-> ![](images/table_results.png)
-
----
-
-## 📧 Contact
-
-For questions or collaboration, please reach out to:  
-- **Ariel Siman Tov**  
-- **Tal Klein**
-
----
-
